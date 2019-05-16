@@ -155,10 +155,12 @@ nlp = spacy.load("en_core_web_sm")
 matcher = Matcher(nlp.vocab)
 matcher.add("HelloWorld", on_match, [{"LEMMA": {"IN": ["like", "love"]}},
             {"POS": "VERB"}])
-matcher.add("Definition",on_match,[{"POS":"DET","OP":"?"},
- {"POS":"NOUN"},
- {"LEMMA":{"IN": ["be","-"]}, },
- {"POS":"DET","OP":"?"},
- {"POS":"VERB"}])
-doc = nlp(u"HTTP is completed and i will do next task")
+matcher.add("Definition",on_match,[
+ {'POS':'NOUN'},
+ {'LOWER':{'IN': ['is','are', '-']}, },
+ {'LOWER':{'IN': ['a','the']} },
+ {'POS':{'IN': ['NOUN', 'ADV']}},
+{'POS': {'NOT_IN':'DET'}, 'OP':'*'},
+{'LOWER': '.'}])
+doc = nlp(u'Language is a system that consists of the development, acquisition, maintenance and use of complex systems of communication, particularly the human ability to do so; and a language is any specific example of such a system.')
 matches = matcher(doc)  
